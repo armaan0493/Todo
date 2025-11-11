@@ -61,6 +61,26 @@ export default function HomePage() {
     }
   };
 
+  <button
+    onClick={ () => {
+      setEditingId(todo._id);
+      setEditValue(todo.title);
+    }
+    }
+style={{
+  padding: "0.5rem 1rem",
+  backgroundColor: "#0070f3",
+  color: "white",
+  border: "none",
+  borderRadius: "6px",
+  cursor: "pointer",
+  fontSize: "0.871rem",
+  marginRight: "0.5rem",
+  
+}}
+>
+  Edit
+</button>
   // Toggle todo completion
   const toggleTodo = async (id: string, currentStatus: boolean) => {
     try {
@@ -106,6 +126,28 @@ export default function HomePage() {
       console.error(err);
     }
   };
+
+    // Update todo
+const updateTodo = async (id: string, newTitle: string) => {
+  try {
+    const response = await fetch(`/api/todos/${id}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ title: newTitle }),
+    });
+
+    const result = await response.json();
+
+    if (result.success) {
+      fetchTodos();
+    } else {
+      setError(result.error || "Failed to update todo");
+    }
+  } catch (err) {
+    setError("Failed to update todo");
+    console.error(err);
+  }
+};
 
   // Handle Enter key press
   const handleKeyPress = (e: React.KeyboardEvent) => {
@@ -183,7 +225,7 @@ export default function HomePage() {
       {loading && todos.length === 0 ? (
         <p style={{ textAlign: "center" }}>Loading...</p>
       ) : (
-        <TodoList todos={todos} onToggle={toggleTodo} onDelete={deleteTodo} />
+        <TodoList todos={todos} onToggle={toggleTodo} onDelete={deleteTodo} onEdit={updateTodo}/>
       )}
 
       {/* Stats */}
