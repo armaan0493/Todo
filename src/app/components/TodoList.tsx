@@ -1,7 +1,8 @@
 import React from "react";
 import { useState } from "react";
-import { Button } from "next";
+
 export interface Todo {
+  dueDate?: Date 
   _id: string;
   title: string;
   completed: boolean;
@@ -48,6 +49,67 @@ const [editValue, setEditValue] = useState("");
             onChange={() => onToggle(todo._id, todo.completed)}
             style={{ marginRight: "0.75rem", cursor: "pointer" }}
           />
+
+{/* {editingId === todo._id ? (
+  <div style={{ flex: 1, display: "flex", gap: "0.5rem" }}>
+    <input
+      type="text"
+      value={editValue}
+      onChange={(e) => setEditValue(e.target.value)}
+      style={{
+        flex: 1,
+        padding: "0.5rem",
+        borderRadius: "6px",
+        border: "1px solid #ddd",
+        fontSize: "1rem",
+      }}
+      autoFocus
+    />
+    <button
+      onClick={() => {
+        if (editValue.trim()) {
+          onEdit(todo._id, editValue.trim());
+          setEditingId(null);
+        }
+      }}
+      style={{
+        padding: "0.5rem 1rem",
+        backgroundColor: "#28a745",
+        color: "white",
+        border: "none",
+        borderRadius: "6px",
+        cursor: "pointer",
+        fontSize: "0.875rem",
+      }}
+    >
+      Save
+    </button>
+    <button
+      onClick={() => setEditingId(null)}
+      style={{
+        padding: "0.5rem 1rem",
+        backgroundColor: "#6c757d",
+        color: "white",
+        border: "none",
+        borderRadius: "6px",
+        cursor: "pointer",
+        fontSize: "0.875rem",
+      }}
+    >
+      Cancel
+    </button>
+  </div>
+) : (
+  <span
+    style={{
+      flex: 1,
+      textDecoration: todo.completed ? "line-through" : "none",
+      color: todo.completed ? "#999" : "#000",
+    }}
+  >
+    {todo.title}
+  </span>
+)} */}
 
 {editingId === todo._id ? (
   <div style={{ flex: 1, display: "flex", gap: "0.5rem" }}>
@@ -109,6 +171,27 @@ const [editValue, setEditValue] = useState("");
     {todo.title}
   </span>
 )}
+{editingId !== todo._id && (
+  <>
+  <button
+  onClick={() => {
+    setEditingId(todo._id);
+    setEditValue(todo.title);
+  }}
+  style={{
+    padding: "0.5rem 1rem",
+    backgroundColor: "#0070f3",
+    color: "white",
+    border: "none",
+    borderRadius: "6px",
+    cursor: "pointer",
+    fontSize: "0.875rem",
+    marginRight: "0.5rem",
+  }}
+>
+  Edit
+</button>
+
 
           <button
             onClick={() => onDelete(todo._id)}
@@ -123,18 +206,11 @@ const [editValue, setEditValue] = useState("");
           >
             Delete
           </button>
+  </>
+)}
+
         </li>
       ))}
     </ul>
   );
 }
-{editingId !== todo._id && (
-  <>
-    <button onClick={() => { setEditingId(todo._id); setEditValue(todo.title); }} ...>
-      Edit
-    </button>
-    <button onClick={() => onDelete(todo._id)} ...>
-      Delete
-    </button>
-  </>
-)}

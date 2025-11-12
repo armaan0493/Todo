@@ -2,6 +2,8 @@ import { NextResponse } from "next/server";
 import { connectToDatabase } from "@/lib/mongodb";
 import Todo from "@/models/Todo";
 
+ 
+
 export async function GET () {
     try {
         await connectToDatabase();
@@ -26,6 +28,7 @@ export async function POST (request: Request) {
     try {
         await connectToDatabase();
         const body = await request.json();
+        const {title, dueDate} = body;
 
         if (!body.title || body.title.trim() === "") {
             return NextResponse.json(
@@ -39,6 +42,7 @@ export async function POST (request: Request) {
 
         const newTodo = await Todo.create({
             title: body.title.trim(),
+            dueDate: body.dueDate,
             completed: body.completed || false,
 });
 

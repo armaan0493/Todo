@@ -1,6 +1,7 @@
 import mongoose, {Schema, model, models} from "mongoose";
 
 export interface ITodo {
+    dueDate: Date,
     title: string;
     completed?: boolean;
     createdAt?: Date;
@@ -10,6 +11,7 @@ export interface ITodo {
 const TodoSchema = new Schema <ITodo>(
     {
     title: {
+        dueDate: Date,
         type: String,
         required: true,
         trim: true,
