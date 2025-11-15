@@ -44,7 +44,10 @@ export default function HomePage() {
       const response = await fetch("/api/todos", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ title: newTodo }),
+       body: JSON.stringify({ 
+  title: newTodo,
+  dueDate: dueDate || null 
+}),
       });
 
       const result = await response.json();
@@ -53,6 +56,7 @@ export default function HomePage() {
         setNewTodo("");
         setError("");
         fetchTodos();
+        setDueDate("");
       } else {
         setError(result.error || "Failed to add todo");
       }
@@ -111,14 +115,17 @@ export default function HomePage() {
   };
 
     // Update todo
-const updateTodo = async (id: string, newTitle: string) => {
+const updateTodo = async (id: string, newTitle: string, newDueDate?: string) => {
   try {
     const response = await fetch(`/api/todos/${id}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ title: newTitle }),
+      body: JSON.stringify({ 
+        title: newTitle,
+        ...(newDueDate && { dueDate: newDueDate })
+      }),
     });
-<input type="date" value={dueDate} onChange={(e) => setDueDate(e.target.value)} />
+    
     const result = await response.json();
 
     if (result.success) {
@@ -165,6 +172,18 @@ const updateTodo = async (id: string, newTitle: string) => {
           placeholder="What needs to be done?"
           style={{
             flex: 1,
+            padding: "0.75rem",
+            borderRadius: "8px",
+            border: "1px solid #ddd",
+            fontSize: "1rem",
+          }}
+          disabled={loading}
+        />
+        <input 
+          type="date" 
+          value={dueDate} 
+          onChange={(e) => setDueDate(e.target.value)}
+          style={{
             padding: "0.75rem",
             borderRadius: "8px",
             border: "1px solid #ddd",
